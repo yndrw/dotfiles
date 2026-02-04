@@ -1,0 +1,2 @@
+#!/bin/sh
+feh --no-fehbg --bg-scale '/home/aiden/.config/bg/bg1.jpg' '/home/aiden/.config/bg/bg2.jpg' 
