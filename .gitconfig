@@ -1,9 +1,0 @@
-[user]
-	name = ydrew
-	email = lyao.andrew@gmail.com
-[core]
-	editor = vim
-[url "https://github.com/"]
-	insteadOf = git://github.com/
-[init]
-	defaultBranch = master
