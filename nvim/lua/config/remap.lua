@@ -1,7 +1,7 @@
 -- [[ Basic Keymaps ]]
 
 -- nop f1
---vim.keymap.set("nit", "<f1>", nop)
+vim.keymap.set({ "n", "i", "t" }, "<F1>", "<Nop>", { desc = "Disable F1" })
 
 -- Open file explorer
 vim.keymap.set("n", "<leader>ee", vim.cmd.Ex, { desc = "Open File [E][E]xplorer" })
@@ -11,6 +11,25 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
+--center cursor to buffer on nav actions
+vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", { desc = "Half page down + center" })
+vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", { desc = "Half page up + center" })
+vim.keymap.set("n", "n", "nzzzv", { desc = "Search down + center + unfold" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Search up + center + unfold" })
+
+--  See `:help lua-guide-autocommands`
+
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.highlight.on_yank()`
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
