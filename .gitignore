@@ -1,2 +1,3 @@
 *.bak
 .gitconfig
+nvim/lazy-lock.json
