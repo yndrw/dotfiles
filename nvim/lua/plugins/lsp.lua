@@ -201,7 +201,7 @@ return {
 								newLineAfterCloseBrace = false, -- cuddle `} else {`; set true for Stroustrup
 								ignoreOneLineBlock = true,
 								whitespaceBeforeOpenBrace = true, -- space in `ForEach-Object {`
-								whitespaceBeforeOpenParen = true, -- space in `if (`, `foreach (`
+								whitespaceBeforeOpenParen = false, -- space in `if (`, `foreach (`
 								whitespaceAroundOperator = true, -- spaces around `=`
 								whitespaceAfterSeparator = true, -- space after `;` and `,`
 								whitespaceInsideBrace = true,
