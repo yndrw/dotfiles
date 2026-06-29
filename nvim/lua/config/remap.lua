@@ -1,7 +1,7 @@
 -- [[ Basic Keymaps ]]
 
 -- nop f1
-vim.keymap.set({ "n", "i", "t" }, "<F1>", "<Nop>", { desc = "Disable F1" })
+vim.keymap.set({ "n", "i", "v", "t" }, "<F1>", "<Nop>", { desc = "Disable F1" })
 
 -- Open file explorer
 vim.keymap.set("n", "<leader>ee", vim.cmd.Ex, { desc = "Open File [E][E]xplorer" })

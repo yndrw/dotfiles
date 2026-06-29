@@ -188,7 +188,32 @@ return {
 				rust_analyzer = {},
 				bashls = {},
 				ts_ls = {},
-				powershell_es = {},
+				powershell_es = {
+					-- bundle_path is auto-set by mason-lspconfig since PSES is mason-installed.
+					settings = {
+						powershell = {
+							codeFormatting = {
+								-- PSES doesn't reliably apply `preset` over LSP (it's VS Code-side
+								-- sugar), so keep it "Custom" and set the brace flags explicitly.
+								preset = "Custom",
+								openBraceOnSameLine = true, -- `ForEach-Object {`, not on a new line
+								newLineAfterOpenBrace = true,
+								newLineAfterCloseBrace = false, -- cuddle `} else {`; set true for Stroustrup
+								ignoreOneLineBlock = true,
+								whitespaceBeforeOpenBrace = true, -- space in `ForEach-Object {`
+								whitespaceBeforeOpenParen = true, -- space in `if (`, `foreach (`
+								whitespaceAroundOperator = true, -- spaces around `=`
+								whitespaceAfterSeparator = true, -- space after `;` and `,`
+								whitespaceInsideBrace = true,
+								addWhitespaceAroundPipe = true, -- ` | `
+								alignPropertyValuePairs = false, -- don't pad the `=` in hashtables
+								avoidSemicolonsAsLineTerminators = false, -- keep trailing `;`
+								pipelineIndentationStyle = "IncreaseIndentationForFirstPipeline",
+								useCorrectCasing = true, -- normalize cmdlet casing (ForEach-Object)
+							},
+						},
+					},
+				},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 
 				lua_ls = {
@@ -224,17 +249,18 @@ return {
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+			-- Apply per-server overrides. mason-lspconfig v2 removed the
+			-- `handlers`/setup_handlers mechanism; it now auto-enables installed
+			-- servers via `vim.lsp.enable()`, which pulls config from the
+			-- `vim.lsp.config` registry. The old `require("lspconfig")[name].setup()`
+			-- path no longer applies `settings`, so register overrides there instead.
+			vim.lsp.config("*", { capabilities = capabilities })
+			for server_name, server in pairs(servers) do
+				vim.lsp.config(server_name, server)
+			end
+
 			require("mason-lspconfig").setup({
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
+				automatic_enable = true, -- enable each installed server with the config above
 			})
 		end,
 	},
